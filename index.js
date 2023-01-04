@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
 
-app.get('/', async (req, res) => {
+app.get('/nsakib', async (req, res) => {
     res.send('Teachers-leave-application beutifull');
 })
 app.get('/nasim', async (req, res) => {
