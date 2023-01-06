@@ -61,7 +61,8 @@ async function run() {
             const userInfo = {
                 email: user.email,
                 title: user.title,
-                department: user.department
+                department: user.department,
+                shift: user.shift
             }
             const addUser = await usersCollection.insertOne(userInfo)
             const department = user.department;
