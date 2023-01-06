@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 // this is test route 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
     res.send('Teachers-leave-application Successfully run');
 })
 
