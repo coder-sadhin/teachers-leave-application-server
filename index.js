@@ -112,6 +112,7 @@ async function run() {
             const user = await usersCollection.findOne(query);
             const department = user.department;
             const qry = {
+                email: email,
                 department: department
             }
             if (department === "civil") {
