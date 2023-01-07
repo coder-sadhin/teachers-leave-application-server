@@ -103,6 +103,54 @@ async function run() {
             }
         })
 
+        // this is for userinfo 
+        app.get('/userInfo', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const user = await usersCollection.findOne(query);
+            const department = user.department;
+            const qry = {
+                department: department
+            }
+            if (department === "civil") {
+                const result = await civilCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "electrical") {
+                const result = await electricalCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "mechanical") {
+                const result = await mechanicalCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "computer") {
+                const result = await computerCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "electronics") {
+                const result = await electronicsCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "power") {
+                const result = await powerCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "electromedical") {
+                const result = await electromedicalCollection.findOne(qry);
+                res.send(result);
+            }
+            else if (department === "mechatronics") {
+                const result = await mechatronicsCollection.findOne(qry);
+                res.send(result);
+            }
+            else {
+                res.status(401).json("Unauthorized Access")
+            }
+        })
+
         // this is check userType Api for validate dashboard
         // this is for genarate your token 
         app.post('/token', async (req, res) => {
