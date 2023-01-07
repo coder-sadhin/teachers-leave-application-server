@@ -50,65 +50,8 @@ async function run() {
         const powerCollection = client.db("teachers_leave_application").collection("powerCollection");
         const electromedicalCollection = client.db("teachers_leave_application").collection("electromedicalCollection");
         const mechatronicsCollection = client.db("teachers_leave_application").collection("mechatronicsCollection");
+        const leavesCollection = client.db("teachers_leave_application").collection("leavesCollection");
         // all are department teacher and employ data collection 
-
-
-
-        // data get with Department (computer)
-        app.get('/department/computer', async (req, res) => {
-            const query = {};
-            const result = await computerCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (civil)
-        app.get('/department/civil', async (req, res) => {
-            const query = {};
-            const result = await civilCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (electrical)
-        app.get('/department/electrical', async (req, res) => {
-            const query = {};
-            const result = await electricalCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (mechanical)
-        app.get('/department/mechanical', async (req, res) => {
-            const query = {};
-            const result = await mechanicalCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (electronics)
-        app.get('/department/electronics', async (req, res) => {
-            const query = {};
-            const result = await electronicsCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (power)
-        app.get('/department/power', async (req, res) => {
-            const query = {};
-            const result = await powerCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (electromedical)
-        app.get('/department/electromedical', async (req, res) => {
-            const query = {};
-            const result = await electromedicalCollection.find(query).toArray();
-            res.send(result);
-        });
-
-        // data get (mechatronics)
-        app.get('/department/mechatronics', async (req, res) => {
-            const query = {};
-            const result = await mechatronicsCollection.find(query).toArray();
-            res.send(result);
-        });
 
 
 
