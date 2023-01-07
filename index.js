@@ -70,36 +70,36 @@ async function run() {
                 const result = await civilCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "electrical") {
+            else if (department === "electrical") {
                 const result = await electricalCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "mechanical") {
+            else if (department === "mechanical") {
                 const result = await mechanicalCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "computer") {
+            else if (department === "computer") {
                 const result = await computerCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "electronics") {
+            else if (department === "electronics") {
                 const result = await electronicsCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "power") {
+            else if (department === "power") {
                 const result = await powerCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "electromedical") {
+            else if (department === "electromedical") {
                 const result = await electromedicalCollection.insertOne(user);
                 res.send(result);
             }
-            if (department === "mechatronics") {
+            else if (department === "mechatronics") {
                 const result = await mechatronicsCollection.insertOne(user);
                 res.send(result);
             }
             else {
-                res.status(401).send("Unauthorized Access")
+                res.status(401).json("Unauthorized Access")
             }
         })
 
