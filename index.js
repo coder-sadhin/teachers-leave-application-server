@@ -42,16 +42,16 @@ async function run() {
     try {
         const usersCollection = client.db("teachers_leave_application").collection("usersCollection");
         // this all are collections 
+        const computerCollection = client.db("teachers_leave_application").collection("computerCollection");
         const civilCollection = client.db("teachers_leave_application").collection("civilCollection");
         const electricalCollection = client.db("teachers_leave_application").collection("electricalCollection");
         const mechanicalCollection = client.db("teachers_leave_application").collection("mechanicalCollection");
-        const computerCollection = client.db("teachers_leave_application").collection("computerCollection");
         const electronicsCollection = client.db("teachers_leave_application").collection("electronicsCollection");
         const powerCollection = client.db("teachers_leave_application").collection("powerCollection");
         const electromedicalCollection = client.db("teachers_leave_application").collection("electromedicalCollection");
         const mechatronicsCollection = client.db("teachers_leave_application").collection("mechatronicsCollection");
+        const leavesCollection = client.db("teachers_leave_application").collection("leavesCollection");
         // all are department teacher and employ data collection 
-
 
 
 
