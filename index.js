@@ -106,11 +106,13 @@ async function run() {
         // this is for userinfo 
         app.get('/userInfo', async (req, res) => {
             const email = req.query.email;
+            console.log(email);
             const query = {
                 email: email
             }
             const user = await usersCollection.findOne(query);
-            const department = user.department;
+            console.log(user);
+            const department = user?.department;
             const qry = {
                 email: email,
                 department: department
