@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -50,10 +50,19 @@ async function run() {
         const powerCollection = client.db("teachers_leave_application").collection("powerCollection");
         const electromedicalCollection = client.db("teachers_leave_application").collection("electromedicalCollection");
         const mechatronicsCollection = client.db("teachers_leave_application").collection("mechatronicsCollection");
+        const departmentCollection = client.db("teachers_leave_application").collection("departmentCollection");
+        const leaveCategori = client.db("teachers_leave_application").collection("leaveCategori");
         const leavesCollection = client.db("teachers_leave_application").collection("leavesCollection");
         // all are department teacher and employ data collection 
 
-
+        const ciPandingApproved = client.db("teachers_leave_application").collection("ciPandingApproved");
+        // this is for leave storeage 
+        const leaveApplicationStoreForAdmin = client.db("teachers_leave_application").collection("leaveApplicationStoreForAdmin");
+        const leaveApplicationStoreForVP = client.db("teachers_leave_application").collection("leaveApplicationStoreForVP");
+        // if teacher then come here 
+        const leaveApplicationStoreForCI = client.db("teachers_leave_application").collection("leaveApplicationStoreForCI");
+        // if staph comes here 
+        const leaveApplicationStoreForCearTekar = client.db("teachers_leave_application").collection("leaveApplicationStoreForCearTekar");
 
         // this is for create user api 
         app.post('/createUser', async (req, res) => {
@@ -106,12 +115,12 @@ async function run() {
         // this is for userinfo 
         app.get('/userInfo', async (req, res) => {
             const email = req.query.email;
-            console.log(email);
+            // console.log(email);
             const query = {
                 email: email
             }
             const user = await usersCollection.findOne(query);
-            console.log(user);
+            // console.log(user);
             const department = user?.department;
             const qry = {
                 email: email,
@@ -164,6 +173,100 @@ async function run() {
             const info = await usersCollection.findOne(query);
             const token = jwt.sign(info, process.env.ACCESS_TOKEN)
             res.send({ token })
+        })
+
+
+        // this is for leave application 
+
+        app.post('/applyLeave', async (req, res) => {
+            const dataInfo = req.body;
+            // console.log(dataInfo);
+            res.json('server data pacche')
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // this is for admin action 
+        app.get('/allDepartment', async (req, res) => {
+            const result = await departmentCollection.find({}).toArray();
+            res.send(result);
+        })
+
+        app.post('/addDepartment', async (req, res) => {
+            const data = req.body;
+            // console.log(data);
+            const query = {
+                d_name: data.d_name
+            }
+            const find = await departmentCollection.findOne(query);
+            if (find) {
+                return res.json("Department Already Exist")
+            }
+            const result = await departmentCollection.insertOne(data);
+            res.send(result)
+        })
+
+        app.get('/leaveCategoris', async (req, res) => {
+            const result = await leaveCategori.find({}).toArray();
+            res.send(result);
+        })
+
+        app.post('/addLeave', async (req, res) => {
+            const data = req.body.data;
+            const result = await leaveCategori.insertOne(data);
+            res.send(result)
+        })
+
+        app.post('/deleteLeave', async (req, res) => {
+            const id = req.params.id;
+            const query = {
+                _id: ObjectId(id)
+            }
+            const result = await leaveCategori.deleteOne(query);
+            res.send(result)
+        })
+
+        app.get('/approvedLeave', async (req, res) => {
+            const result = await leaveApplicationStoreForAdmin.find({}).toArray();
+            res.send(result);
+        })
+
+        app.get('/ciPending', async (req, res) => {
+            const result = await ciPandingApproved.find({}).toArray();
+            res.send(result);
         })
     }
     finally {
