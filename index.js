@@ -183,6 +183,21 @@ async function run() {
             const dataInfo = req.body;
             // console.log(dataInfo);
             res.json('server data pacche')
+        });
+
+        // this is for creditInfo application
+        app.post('/credits', async(req, res) => {
+            const credit = req.body;
+            const result = await creditsCollections.insertOne(credit);
+            res.send(result);
+            console.log(result)
+        });
+
+        // get credits data
+        app.get('/credits', async(req, res) => {
+            const query = {};
+            const result = await creditsCollections.find(query).toArray();
+            res.send(result);
         })
 
 
