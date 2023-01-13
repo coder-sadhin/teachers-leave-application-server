@@ -63,6 +63,7 @@ async function run() {
         const leaveApplicationStoreForCI = client.db("teachers_leave_application").collection("leaveApplicationStoreForCI");
         // if staph comes here 
         const leaveApplicationStoreForCearTekar = client.db("teachers_leave_application").collection("leaveApplicationStoreForCearTekar");
+        const creditsCollections = client.db("teachers_leave_application").collection("creditsCollections");
 
         // this is for create user api 
         app.post('/createUser', async (req, res) => {
@@ -266,6 +267,19 @@ async function run() {
 
         app.get('/ciPending', async (req, res) => {
             const result = await ciPandingApproved.find({}).toArray();
+            res.send(result);
+        })
+
+        // cradits api 
+
+        app.get('/credits', async (req, res) => {
+            const result = await creditsCollections.find({}).toArray();
+            res.send(result);
+        })
+
+        app.post('/credits', async (req, res) => {
+            const data = req.body;
+            const result = await creditsCollections.insertOne(data);
             res.send(result);
         })
     }
