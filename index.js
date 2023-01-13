@@ -198,7 +198,15 @@ async function run() {
             const query = {};
             const result = await creditsCollections.find(query).toArray();
             res.send(result);
-        })
+        });
+
+        // get credit data with id
+        app.get('/credit/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await creditsCollections.findOne(filter);
+            res.send(result);
+        });
 
 
 
