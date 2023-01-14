@@ -319,6 +319,35 @@ async function run() {
             const result = await creditsCollections.findOne(filter);
             res.send(result);
         });
+
+
+
+
+
+
+
+
+        // this is for typeuse 
+        app.get('/checkuser/type', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const findUser = await usersCollection.findOne(query);
+            // console.log(findUser);
+            if (findUser.title === "superAdmin") {
+                res.json("superAdmin")
+            }
+            else if (findUser.title === "subSuperAdmin") {
+                res.json("subSuperAdmin")
+            }
+            else if (findUser.title === "Chief Instructor" || findUser === "Caretaker") {
+                res.json("admin")
+            }
+            else {
+                res.json("user")
+            }
+        })
     }
     finally {
 
