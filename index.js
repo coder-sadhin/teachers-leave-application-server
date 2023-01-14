@@ -178,8 +178,14 @@ async function run() {
         })
 
 
-        // this is for leave application 
 
+
+
+
+
+
+
+        // this is for leave application 
         app.post('/applyLeave', async (req, res) => {
             const dataInfo = req.body;
             const title = dataInfo.title;
@@ -199,6 +205,7 @@ async function run() {
             res.send(result)
         });
 
+        // this is for manage leave 
         app.get('/manageLeave', async (req, res) => {
             const email = req.query.email;
             const query = {
@@ -208,10 +215,140 @@ async function run() {
             res.send(result);
         })
 
+        // this is for pending application view
+        app.get('/pendingLeave', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const user = await usersCollection.findOne(query);
+            // console.log(user);
+            if (user.title === "Chief Instructor") {
+                const status = "pending";
+                const query = {
+                    department: user.department,
+                    shift: user.shift,
+                    status: status
+                }
+                const result = await leaveApplicationStoreForCI.find(query).toArray();
+                res.send(result);
+            } else if (user.title === "Caretaker") {
+                const status = "pending";
+                const query = {
+                    department: user.department,
+                    shift: user.shift,
+                    status: status
+                }
+                const result = await leaveApplicationStoreForCearTekar.find(query).toArray();
+                res.send(result);
+            } else if (user.title === "subSuperAdmin" || user.title === "superAdmin") {
+                const status = "pending";
+                const query = {
+                    status: status
+                }
+                const result = await leaveApplicationStoreForVP.find(query).toArray();
+                res.send(result);
+            } else {
+                res.json("Action Not Completed")
+            }
+        })
 
+        // this is for approved history 
+        app.get('/approvedLeave', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const user = await usersCollection.findOne(query);
+            // console.log(user);
+            const status = "approved";
+            if (user.title === "Chief Instructor") {
+                const query = {
+                    department: user.department,
+                    shift: user.shift,
+                    status: status
+                }
+                const result = await leaveApplicationStoreForCI.find(query).toArray();
+                res.send(result);
+            } else if (user.title === "Caretaker") {
+                const query = {
+                    department: user.department,
+                    shift: user.shift,
+                    status: status
+                }
+                const result = await leaveApplicationStoreForCearTekar.find(query).toArray();
+                res.send(result);
+            } else if (user.title === "subSuperAdmin" || user.title === "superAdmin") {
+                const query = {
+                    status: status
+                }
+                const result = await leaveApplicationStoreForVP.find(query).toArray();
+                res.send(result);
+            } else {
+                res.json("Action Not Completed")
+            }
+        })
 
+        // this is for admin approved leave application 
+        app.put('/AdminApprovedLeave', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id)
+            const filter = {
+                _id: ObjectId(id)
+            }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: { status: 'approved' },
+            }
+            const updateDoc2 = {
+                $set: { status: 'approved', passed: 'Your Application Approved' },
+            }
+            const result = await leaveApplicationStoreForVP.updateOne(filter, updateDoc, options);
+            const result2 = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
+            res.send(result2);
+        })
 
+        // this is for ci to vp or principal 
+        app.put('/ciToAdmin', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id)
+            const filter = {
+                _id: ObjectId(id)
+            }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: { status: 'approved' },
+            }
+            const updateDoc2 = {
+                $set: { passed: 'Approved by CI, waiting for Admin Approved' },
+            }
+            const selectLeave = await leaveApplicationStoreForCI.findOne(filter);
+            const result = await leaveApplicationStoreForVP.insertOne(selectLeave);
+            const userUpdate = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
+            const result1 = await leaveApplicationStoreForCI.updateOne(filter, updateDoc, options);
+            res.send(result1);
+        })
 
+        // this is for caretaker to vp or principal 
+        app.put('/ctToAdmin', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id)
+            const filter = {
+                _id: ObjectId(id)
+            }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: { status: 'approved' },
+            }
+            const updateDoc2 = {
+                $set: { passed: 'Approved by Caretaker, waiting for Admin Approved' },
+            }
+            const selectLeave = await leaveApplicationStoreForCearTekar.findOne(filter);
+            const result = await leaveApplicationStoreForVP.insertOne(selectLeave);
+            const userUpdate = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
+            const result1 = await leaveApplicationStoreForCearTekar.updateOne(filter, updateDoc, options);
+            res.send(result1);
+        })
 
 
 
