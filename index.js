@@ -52,7 +52,7 @@ async function run() {
         const mechatronicsCollection = client.db("teachers_leave_application").collection("mechatronicsCollection");
         const departmentCollection = client.db("teachers_leave_application").collection("departmentCollection");
         const leaveCategori = client.db("teachers_leave_application").collection("leaveCategori");
-        const leavesCollection = client.db("teachers_leave_application").collection("leavesCollection");
+        // const leavesCollection = client.db("teachers_leave_application").collection("leavesCollection");
         // all are department teacher and employ data collection 
 
         const ciPandingApproved = client.db("teachers_leave_application").collection("ciPandingApproved");
@@ -63,6 +63,7 @@ async function run() {
         const leaveApplicationStoreForCI = client.db("teachers_leave_application").collection("leaveApplicationStoreForCI");
         // if staph comes here 
         const leaveApplicationStoreForCearTekar = client.db("teachers_leave_application").collection("leaveApplicationStoreForCearTekar");
+        const leaveApplicationStoreForAll = client.db("teachers_leave_application").collection("leaveApplicationStoreForAll");
         const creditsCollections = client.db("teachers_leave_application").collection("creditsCollections");
 
         // this is for create user api 
@@ -181,32 +182,31 @@ async function run() {
 
         app.post('/applyLeave', async (req, res) => {
             const dataInfo = req.body;
-            // console.log(dataInfo);
-            res.json('server data pacche')
+            const title = dataInfo.title;
+            if (title === "Chief Instructor" || title === "caretaker") {
+                const result = await leaveApplicationStoreForVP.insertOne(dataInfo);
+            }
+            else if (title === "instructor") {
+                const result = await leaveApplicationStoreForCI.insertOne(dataInfo);
+            }
+            else if (title === "employee") {
+                const result = await leaveApplicationStoreForCearTekar.insertOne(dataInfo);
+            }
+            else {
+                res.json('Wrong Information')
+            }
+            const result = await leaveApplicationStoreForAll.insertOne(dataInfo);
+            res.send(result)
         });
 
-        // this is for creditInfo application
-        app.post('/credits', async(req, res) => {
-            const credit = req.body;
-            const result = await creditsCollections.insertOne(credit);
+        app.get('/manageLeave', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email: email
+            }
+            const result = await leaveApplicationStoreForAll.find(query).toArray();
             res.send(result);
-            console.log(result)
-        });
-
-        // get credits data
-        app.get('/credits', async(req, res) => {
-            const query = {};
-            const result = await creditsCollections.find(query).toArray();
-            res.send(result);
-        });
-
-        // get credit data with id
-        app.get('/credit/:id', async(req, res) => {
-            const id = req.params.id;
-            const filter = {_id: ObjectId(id)};
-            const result = await creditsCollections.findOne(filter);
-            res.send(result);
-        });
+        })
 
 
 
@@ -293,18 +293,32 @@ async function run() {
             res.send(result);
         })
 
+
+
+
         // cradits api 
-
-        app.get('/credits', async (req, res) => {
-            const result = await creditsCollections.find({}).toArray();
-            res.send(result);
-        })
-
+        // this is for creditInfo application
         app.post('/credits', async (req, res) => {
-            const data = req.body;
-            const result = await creditsCollections.insertOne(data);
+            const credit = req.body;
+            const result = await creditsCollections.insertOne(credit);
             res.send(result);
-        })
+            console.log(result)
+        });
+
+        // get credits data
+        app.get('/credits', async (req, res) => {
+            const query = {};
+            const result = await creditsCollections.find(query).toArray();
+            res.send(result);
+        });
+
+        // get credit data with id
+        app.get('/credit/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await creditsCollections.findOne(filter);
+            res.send(result);
+        });
     }
     finally {
 
