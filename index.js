@@ -489,12 +489,42 @@ async function run() {
 
 
         // All delete method process is here
+        // ==================================
+        //leaveCategory delete
         app.delete('/leaveCategory/:id', async(req, res) =>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const result = await leaveCategori.deleteOne(query);
             res.send(result);
+        });
+
+        // department delete
+        app.delete('/department/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await departmentCollection.deleteOne(query);
+            res.send(result);
         })
+
+
+        // All Update method process is here
+        // =================================
+        // leaveCategory update (put)
+        app.put('/leaveCategory/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const leaveCategory = req.body;
+            const option = {upsert: true};
+            const updateLeave = {
+                $set: {
+                    leaveName: leave.leaveName,
+                    totalday: leave.totalday
+                }
+            }
+
+            const result = await leaveCategori.updateOne(filter, updateLeave, option);
+            res.send(result);
+        });
 
 
     }
