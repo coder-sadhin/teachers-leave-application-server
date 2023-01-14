@@ -406,7 +406,8 @@ async function run() {
         })
 
         app.post('/addLeave', async (req, res) => {
-            const data = req.body.data;
+            const data = req.body;
+            console.log(data)
             const result = await leaveCategori.insertOne(data);
             res.send(result)
         })
@@ -428,10 +429,10 @@ async function run() {
         app.get('/ciPending', async (req, res) => {
             const result = await ciPandingApproved.find({}).toArray();
             res.send(result);
-        })
+        });
 
 
-
+    
 
         // cradits api 
         // this is for creditInfo application
@@ -484,7 +485,18 @@ async function run() {
             else {
                 res.json("user")
             }
+        });
+
+
+        // All delete method process is here
+        app.delete('/leaveCategory/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await leaveCategori.deleteOne(query);
+            res.send(result);
         })
+
+
     }
     finally {
 
