@@ -188,18 +188,19 @@ async function run() {
         // this is for leave application 
         app.post('/applyLeave', async (req, res) => {
             const dataInfo = req.body;
+            console.log(dataInfo);
             const title = dataInfo.title;
             if (title === "Chief Instructor" || title === "caretaker") {
                 const result = await leaveApplicationStoreForVP.insertOne(dataInfo);
             }
-            else if (title === "instructor") {
+            else if (title === "Instructor") {
                 const result = await leaveApplicationStoreForCI.insertOne(dataInfo);
             }
-            else if (title === "employee") {
+            else if (title === "Sub Instructor") {
                 const result = await leaveApplicationStoreForCearTekar.insertOne(dataInfo);
             }
             else {
-                res.json('Wrong Information')
+                return res.json('Wrong Information')
             }
             const result = await leaveApplicationStoreForAll.insertOne(dataInfo);
             res.send(result)
@@ -432,7 +433,7 @@ async function run() {
         });
 
 
-    
+
 
         // cradits api 
         // this is for creditInfo application
@@ -473,13 +474,13 @@ async function run() {
             }
             const findUser = await usersCollection.findOne(query);
             // console.log(findUser);
-            if (findUser.title === "superAdmin") {
+            if (findUser?.title === "superAdmin") {
                 res.json("superAdmin")
             }
-            else if (findUser.title === "subSuperAdmin") {
+            else if (findUser?.title === "subSuperAdmin") {
                 res.json("subSuperAdmin")
             }
-            else if (findUser.title === "Chief Instructor" || findUser === "Caretaker") {
+            else if (findUser?.title === "Chief Instructor" || findUser?.title === "Caretaker") {
                 res.json("admin")
             }
             else {
@@ -491,17 +492,17 @@ async function run() {
         // All delete method process is here
         // ==================================
         //leaveCategory delete
-        app.delete('/leaveCategory/:id', async(req, res) =>{
+        app.delete('/leaveCategory/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await leaveCategori.deleteOne(query);
             res.send(result);
         });
 
         // department delete
-        app.delete('/department/:id', async(req, res) => {
+        app.delete('/department/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await departmentCollection.deleteOne(query);
             res.send(result);
         })
@@ -510,11 +511,11 @@ async function run() {
         // All Update method process is here
         // =================================
         // leaveCategory update (put)
-        app.put('/leaveCategory/:id', async(req, res) => {
+        app.put('/leaveCategory/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = {_id: ObjectId(id)};
+            const filter = { _id: ObjectId(id) };
             const leaveCategory = req.body;
-            const option = {upsert: true};
+            const option = { upsert: true };
             const updateLeave = {
                 $set: {
                     leaveName: leave.leaveName,
