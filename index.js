@@ -290,25 +290,6 @@ async function run() {
             }
         })
 
-        // this is for admin approved leave application 
-        app.put('/AdminApprovedLeave', async (req, res) => {
-            const id = req.params.id;
-            // console.log(id)
-            const filter = {
-                _id: ObjectId(id)
-            }
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: { status: 'approved' },
-            }
-            const updateDoc2 = {
-                $set: { status: 'approved', passed: 'Your Application Approved' },
-            }
-            const result = await leaveApplicationStoreForVP.updateOne(filter, updateDoc, options);
-            const result2 = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
-            res.send(result2);
-        })
-
         // this is for ci to vp or principal 
         app.put('/ciToAdmin', async (req, res) => {
             const id = req.params.id;
@@ -328,6 +309,25 @@ async function run() {
             const userUpdate = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
             const result1 = await leaveApplicationStoreForCI.updateOne(filter, updateDoc, options);
             res.send(result1);
+        })
+
+        // this is for admin approved leave application 
+        app.put('/AdminApprovedLeave', async (req, res) => {
+            const id = req.params.id;
+            // console.log(id)
+            const filter = {
+                _id: ObjectId(id)
+            }
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: { status: 'approved' },
+            }
+            const updateDoc2 = {
+                $set: { status: 'approved', passed: 'Your Application Approved' },
+            }
+            const result = await leaveApplicationStoreForVP.updateOne(filter, updateDoc, options);
+            const result2 = await leaveApplicationStoreForAll.updateOne(filter, updateDoc2, options);
+            res.send(result2);
         })
 
         // this is for caretaker to vp or principal 
